@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.zaidkhaled.moviescatalog.data.db.ApplicationDB
+import java.io.Serializable
 
 @Entity(tableName = ApplicationDB.TABLE_MOVIES)
 data class MovieResponse(
@@ -33,4 +34,4 @@ data class MovieResponse(
     @ColumnInfo(name = "vote_count")
     @field:SerializedName("vote_count")
     val vote_count: Int?
-)
+) : Serializable

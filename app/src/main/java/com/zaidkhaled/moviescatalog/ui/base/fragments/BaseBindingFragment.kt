@@ -19,6 +19,7 @@ abstract class BaseBindingFragment<V : ViewDataBinding> : BaseFragment() {
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
             mView = binding?.root
+            binding?.lifecycleOwner = this
             onViewVisible(mView!!)
         }
 

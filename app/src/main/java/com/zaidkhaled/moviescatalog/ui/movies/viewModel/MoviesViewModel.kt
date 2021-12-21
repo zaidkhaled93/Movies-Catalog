@@ -3,6 +3,7 @@ package com.zaidkhaled.moviescatalog.ui.movies.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.zaidkhaled.moviescatalog.common.constants.NetworkConstants
+import com.zaidkhaled.moviescatalog.common.enums.MovieSort
 import com.zaidkhaled.moviescatalog.data.models.responses.MovieResponse
 import com.zaidkhaled.moviescatalog.data.models.wrappers.Resource
 import com.zaidkhaled.moviescatalog.data.repositories.moviesRepository.MoviesRepository
@@ -14,17 +15,22 @@ import javax.inject.Inject
 class MoviesViewModel @Inject constructor(private val moviesRepo: MoviesRepository) :
     BaseViewModel() {
 
-    private val moviesList: MutableLiveData<List<MovieResponse>> by lazy { MutableLiveData<List<MovieResponse>>() }
+    //the three movies lists liveData, that are connected to the UI using data binding
+    val popularMoviesList: MutableLiveData<List<MovieResponse>> by lazy { MutableLiveData<List<MovieResponse>>() }
+    val topRatedMoviesList: MutableLiveData<List<MovieResponse>> by lazy { MutableLiveData<List<MovieResponse>>() }
+    val revenueMoviesList: MutableLiveData<List<MovieResponse>> by lazy { MutableLiveData<List<MovieResponse>>() }
 
-    fun loadMoviesListApi(page: Int) = liveData {
+    //api remote call to get movies list with pagination and sorting type
+    fun loadMoviesListApi(page: Int, sortBy: MovieSort) = liveData {
         emit(Resource.loading(data = null))
         try {
             val response =
-                moviesRepo.getMovies(NetworkConstants.API_KEY, "popularity.desc", false, page)
+                moviesRepo.getMovies(NetworkConstants.API_KEY, sortBy.value, false, page)
             if (response.results != null) {
-//                val apiList = response.data ?: arrayListOf()
+                distributeMoviesListBySortType(response.results, sortBy)
                 emit(Resource.success(data = response))
             } else {
+                //we can handle errors here depending on server response, for example 400, 401, 403...etc
                 emit(
                     Resource.customError(
                         data = null,
@@ -35,6 +41,15 @@ class MoviesViewModel @Inject constructor(private val moviesRepo: MoviesReposito
             }
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    //set movies list by sorting type to be reflected in UI by data binding
+    private fun distributeMoviesListBySortType(moviesList: List<MovieResponse>, sortBy: MovieSort) {
+        when (sortBy) {
+            MovieSort.Popularity -> popularMoviesList.postValue(moviesList)
+            MovieSort.TopRated -> topRatedMoviesList.postValue(moviesList)
+            MovieSort.Revenue -> revenueMoviesList.postValue(moviesList)
         }
     }
 }

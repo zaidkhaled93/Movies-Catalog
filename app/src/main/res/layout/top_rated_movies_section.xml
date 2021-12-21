@@ -1,46 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_v_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/_12sdp" />
+<layout>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_v_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/_12sdp" />
+    <data>
 
-    <TextView
-        android:id="@+id/tv_section_title"
-        style="@style/AppTheme.MovieSectionTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/top_rated"
-        app:layout_constraintEnd_toEndOf="@id/gl_v_end"
-        app:layout_constraintStart_toStartOf="@id/gl_v_start"
-        app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.zaidkhaled.moviescatalog.ui.movies.viewModel.MoviesViewModel" />
+    </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_top_rated_movies"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_section_title"
-        tools:itemCount="3"
-        tools:listitem="@layout/row_movie" />
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_v_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/_12sdp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_v_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/_12sdp" />
+
+        <TextView
+            android:id="@+id/tv_section_title"
+            style="@style/AppTheme.MovieSectionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/top_rated"
+            app:layout_constraintEnd_toEndOf="@id/gl_v_end"
+            app:layout_constraintStart_toStartOf="@id/gl_v_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_top_rated_movies"
+            rvItems="@{viewModel.topRatedMoviesList}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            style="@style/MoviesRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_section_title"
+            tools:itemCount="3"
+            tools:listitem="@layout/row_movie" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

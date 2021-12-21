@@ -25,6 +25,12 @@
         android:id="@+id/movieDetailsFragment"
         android:name="com.zaidkhaled.moviescatalog.ui.movies.movieDetails.MovieDetailsFragment"
         android:label="movieDetailsFragment"
-        tools:layout="@layout/fragment_movie_details" />
+        tools:layout="@layout/fragment_movie_details">
+
+        <argument
+            android:name="passedMovie"
+            app:argType="com.zaidkhaled.moviescatalog.data.models.responses.MovieResponse" />
+
+    </fragment>
 
 </navigation>

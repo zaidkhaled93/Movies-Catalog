@@ -14,5 +14,6 @@ abstract class BaseBindingActivity<V : ViewDataBinding> : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding =
             DataBindingUtil.setContentView(this, layoutId)
+        binding?.lifecycleOwner = this
     }
 }

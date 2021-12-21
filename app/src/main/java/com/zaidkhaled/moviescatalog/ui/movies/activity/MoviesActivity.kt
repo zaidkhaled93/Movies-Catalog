@@ -22,13 +22,12 @@ class MoviesActivity : BaseBindingActivity<ActivityMoviesBinding>() {
         setUpNavigationGraph()
     }
 
+    //set up the container activity navigation graph
     private fun setUpNavigationGraph() {
         val navHostFragment = movies_nav_host_fragment as NavHostFragment
         navController = navHostFragment.navController
         val inflater = navController.navInflater
         val graph = inflater.inflate(R.navigation.movies_nav_graph)
-
-        graph.startDestination = R.id.moviesListFragment
 
         navHostFragment.navController.graph = graph
     }
