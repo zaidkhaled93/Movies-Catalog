@@ -2,6 +2,7 @@ package com.zaidkhaled.moviescatalog.ui.movies.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import com.zaidkhaled.moviescatalog.common.constants.NetworkConstants
 import com.zaidkhaled.moviescatalog.data.models.responses.MovieResponse
 import com.zaidkhaled.moviescatalog.data.models.wrappers.Resource
 import com.zaidkhaled.moviescatalog.data.repositories.moviesRepository.MoviesRepository
@@ -15,19 +16,20 @@ class MoviesViewModel @Inject constructor(private val moviesRepo: MoviesReposito
 
     private val moviesList: MutableLiveData<List<MovieResponse>> by lazy { MutableLiveData<List<MovieResponse>>() }
 
-    fun loadMoviesListApi() = liveData {
+    fun loadMoviesListApi(page: Int) = liveData {
         emit(Resource.loading(data = null))
         try {
-            val response = moviesRepo.getMovies()
-            if (response.success == true) {
+            val response =
+                moviesRepo.getMovies(NetworkConstants.API_KEY, "popularity.desc", false, page)
+            if (response.results != null) {
 //                val apiList = response.data ?: arrayListOf()
                 emit(Resource.success(data = response))
             } else {
                 emit(
                     Resource.customError(
                         data = null,
-                        message = response.errorMessage ?: "Error Occurred!",
-                        code = response.errorCode ?: 0
+                        message = "No results found!",
+                        code = 400
                     )
                 )
             }

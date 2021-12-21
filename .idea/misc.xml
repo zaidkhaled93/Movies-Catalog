@@ -6,6 +6,10 @@
         <entry key="app/src/main/res/layout/activity_movies.xml" value="0.3129528985507246" />
         <entry key="app/src/main/res/layout/fragment_movie_details.xml" value="0.3129528985507246" />
         <entry key="app/src/main/res/layout/fragment_movies_list.xml" value="0.3129528985507246" />
+        <entry key="app/src/main/res/layout/popular_movies_section.xml" value="0.2916666666666667" />
+        <entry key="app/src/main/res/layout/revenue_movies_section.xml" value="0.2916666666666667" />
+        <entry key="app/src/main/res/layout/row_movie.xml" value="0.2916666666666667" />
+        <entry key="app/src/main/res/layout/top_rated_movies_section.xml" value="0.2916666666666667" />
       </map>
     </option>
   </component>

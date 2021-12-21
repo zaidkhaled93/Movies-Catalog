@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <import type="com.zaidkhaled.moviescatalog.R" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="movie"
+            type="com.zaidkhaled.moviescatalog.data.models.responses.MovieResponse" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_140sdp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivLogo"
+            style="@style/roundedImageView"
+            defaultImage="@{R.drawable.placeholder}"
+            imageUrl="@{movie.poster_path}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
