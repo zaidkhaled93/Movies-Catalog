@@ -7,6 +7,7 @@
         <variable
             name="viewModel"
             type="com.zaidkhaled.moviescatalog.ui.movies.viewModel.MoviesViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

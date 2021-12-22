@@ -30,19 +30,18 @@ class MoviesViewModel @Inject constructor(
 
     //api remote call to get movies list with pagination and sorting type
     fun loadMoviesListApi(page: Int, sortBy: MovieSort) = liveData {
-        loadCachedMovies()
         isLoading = true
         emit(Resource.loading(data = null))
         try {
             val response =
                 moviesRepo.getMovies(NetworkConstants.API_KEY, sortBy.value, false, page)
+            isLoading = false
             if (response.results != null) {
                 distributeMoviesListBySortType(response.results, sortBy)
                 cacheMoviesList(response.results)
-                isLoading = false
                 emit(Resource.success(data = response))
             } else {
-                //we can handle errors here depending on server response, for example 400, 401, 403...etc
+                //Handle errors here depending on server response, for example 400, 401, 403...etc
                 emit(
                     Resource.customError(
                         data = null,
@@ -57,14 +56,14 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    //here we cache the movies locally
+    //Cache the movies locally
     fun cacheMoviesList(list: List<MovieResponse>) {
         viewModelScope.launch {
             localMoviesRepo.saveMovies(list)
         }
     }
 
-    /*here we load the local cached movies list until api retrieves new data.
+    /*Load the local cached movies list until api retrieves new data.
     the local caching should include the movies by sort, but only to show room implementation
     , currently we are caching all movies locally without sorting.
     */
@@ -80,7 +79,11 @@ class MoviesViewModel @Inject constructor(
     //set movies list by sorting type to be reflected in UI by data binding
     private fun distributeMoviesListBySortType(moviesList: List<MovieResponse>, sortBy: MovieSort) {
         when (sortBy) {
-            MovieSort.Popularity -> popularMoviesList.postValue(moviesList)
+            MovieSort.Popularity -> {
+                val oldList = popularMoviesList.value?.toMutableList() ?: arrayListOf()
+                oldList.addAll(moviesList)
+                popularMoviesList.postValue(oldList)
+            }
             MovieSort.TopRated -> topRatedMoviesList.postValue(moviesList)
             MovieSort.Revenue -> revenueMoviesList.postValue(moviesList)
         }

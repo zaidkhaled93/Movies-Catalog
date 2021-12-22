@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
+//Base class for shared properties and functions between all fragments..
 abstract class BaseFragment : Fragment() {
 
     protected abstract val layoutId: Int

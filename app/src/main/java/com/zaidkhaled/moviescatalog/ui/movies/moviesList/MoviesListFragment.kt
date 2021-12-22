@@ -44,24 +44,26 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
     lateinit var revenueMoviesAdapter: MoviesListAdapter
 
     private var popularMoviesPage: Int = 1
-    private var topRatedMoviesPage: Int = 1
-    private var revenueMoviesPage: Int = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.viewModel = viewModel
         setAdapters()
+        setUpPopularPagination()
+    }
+
+    override fun onViewVisible(view: View) {
+        super.onViewVisible(view)
         loadMovies()
-        setUpPagination()
     }
 
     private fun loadMovies() {
         //load popular movies
         loadMoviesList(popularMoviesPage, MovieSort.Popularity)
         //load top rated movies
-        loadMoviesList(topRatedMoviesPage, MovieSort.TopRated)
+        loadMoviesList(1, MovieSort.TopRated)
         //load revenue movies
-        loadMoviesList(revenueMoviesPage, MovieSort.Revenue)
+        loadMoviesList(1, MovieSort.Revenue)
     }
 
     //observe emitted response status to handle loading and errors
@@ -71,16 +73,14 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
                 Status.SUCCESS -> {
                     binding?.progressBar.hide()
                 }
-                Status.ERROR -> {
+                Status.ERROR, Status.CUSTOM_ERROR -> {
                     binding?.progressBar.hide()
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                    //Api / Server failed to fetch, load cached movies
+                    viewModel.loadCachedMovies()
                 }
                 Status.LOADING -> {
                     binding?.progressBar.show()
-                }
-                Status.CUSTOM_ERROR -> {
-                    binding?.progressBar.hide()
-                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -140,12 +140,9 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
         )
     }
 
-    private fun setUpPagination() {
+    private fun setUpPopularPagination() {
         //reset page numbers
         popularMoviesPage = 1
-        topRatedMoviesPage = 1
-        revenueMoviesPage = 1
-
         //add scroll listener for pagination for each recycler
         rv_popular_movies?.addOnScrollListener(object : PaginationScrollListener() {
             override fun isLastPage(): Boolean {
@@ -159,36 +156,6 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
             override fun loadMoreItems() {
                 popularMoviesPage += 1
                 loadMoviesList(popularMoviesPage, MovieSort.Popularity)
-            }
-        })
-
-        rv_top_rated_movies?.addOnScrollListener(object : PaginationScrollListener() {
-            override fun isLastPage(): Boolean {
-                return viewModel.isLastPage()
-            }
-
-            override fun isLoading(): Boolean {
-                return viewModel.isLoading()
-            }
-
-            override fun loadMoreItems() {
-                topRatedMoviesPage += 1
-                loadMoviesList(topRatedMoviesPage, MovieSort.TopRated)
-            }
-        })
-
-        rv_revenue_movies?.addOnScrollListener(object : PaginationScrollListener() {
-            override fun isLastPage(): Boolean {
-                return viewModel.isLastPage()
-            }
-
-            override fun isLoading(): Boolean {
-                return viewModel.isLoading()
-            }
-
-            override fun loadMoreItems() {
-                revenueMoviesPage += 1
-                loadMoviesList(revenueMoviesPage, MovieSort.Revenue)
             }
         })
     }

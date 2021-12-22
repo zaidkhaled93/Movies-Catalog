@@ -7,6 +7,7 @@
         <variable
             name="viewModel"
             type="com.zaidkhaled.moviescatalog.ui.movies.viewModel.MoviesViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,11 +42,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_top_rated_movies"
+            style="@style/MoviesRecyclerView"
             rvItems="@{viewModel.topRatedMoviesList}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            style="@style/MoviesRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_section_title"
