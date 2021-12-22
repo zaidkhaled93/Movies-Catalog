@@ -45,7 +45,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_popular_movies"
-                app:viewModel="@{viewModel}"/>
+                app:viewModel="@{viewModel}" />
 
             <include
                 android:id="@+id/layout_revenue_movies"
@@ -56,7 +56,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_top_rated_movies"
-                app:viewModel="@{viewModel}"/>
+                app:viewModel="@{viewModel}" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

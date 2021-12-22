@@ -53,7 +53,7 @@
 
             <TextView
                 android:id="@+id/tv_movie_title"
-                style="@style/AppTheme.MovieName"
+                style="@style/AppTheme.TitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -64,7 +64,7 @@
 
             <TextView
                 android:id="@+id/tv_movie_rating"
-                style="@style/AppTheme.MovieRating"
+                style="@style/AppTheme.SmallTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -75,7 +75,7 @@
 
             <TextView
                 android:id="@+id/tv_movie_overview"
-                style="@style/AppTheme.MovieOverview"
+                style="@style/AppTheme.SubTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
