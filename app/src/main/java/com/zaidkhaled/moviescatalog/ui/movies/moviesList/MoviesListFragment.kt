@@ -17,6 +17,7 @@ import com.zaidkhaled.moviescatalog.databinding.FragmentMoviesListBinding
 import com.zaidkhaled.moviescatalog.extensions.hide
 import com.zaidkhaled.moviescatalog.extensions.show
 import com.zaidkhaled.moviescatalog.ui.base.adapter.OnItemClickListener
+import com.zaidkhaled.moviescatalog.ui.base.adapter.PaginationScrollListener
 import com.zaidkhaled.moviescatalog.ui.base.fragments.BaseBindingFragment
 import com.zaidkhaled.moviescatalog.ui.movies.viewModel.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,18 +52,16 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
         binding?.viewModel = viewModel
         setAdapters()
         loadMovies()
+        setUpPagination()
     }
 
     private fun loadMovies() {
         //load popular movies
-        viewModel.loadMoviesListApi(popularMoviesPage, MovieSort.Popularity)
-            .observe(viewLifecycleOwner, moviesObserver)
+        loadMoviesList(popularMoviesPage, MovieSort.Popularity)
         //load top rated movies
-        viewModel.loadMoviesListApi(topRatedMoviesPage, MovieSort.TopRated)
-            .observe(viewLifecycleOwner, moviesObserver)
+        loadMoviesList(topRatedMoviesPage, MovieSort.TopRated)
         //load revenue movies
-        viewModel.loadMoviesListApi(revenueMoviesPage, MovieSort.Revenue)
-            .observe(viewLifecycleOwner, moviesObserver)
+        loadMoviesList(revenueMoviesPage, MovieSort.Revenue)
     }
 
     //observe emitted response status to handle loading and errors
@@ -85,6 +84,11 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
                 }
             }
         }
+    }
+
+    private fun loadMoviesList(page: Int, sortBy: MovieSort) {
+        viewModel.loadMoviesListApi(page, sortBy)
+            .observe(viewLifecycleOwner, moviesObserver)
     }
 
     private fun setAdapters() {
@@ -134,5 +138,58 @@ class MoviesListFragment : BaseBindingFragment<FragmentMoviesListBinding>() {
             R.id.openMovieDetailsFragment,
             bundleOf("passedMovie" to movie)
         )
+    }
+
+    private fun setUpPagination() {
+        //reset page numbers
+        popularMoviesPage = 1
+        topRatedMoviesPage = 1
+        revenueMoviesPage = 1
+
+        //add scroll listener for pagination for each recycler
+        rv_popular_movies?.addOnScrollListener(object : PaginationScrollListener() {
+            override fun isLastPage(): Boolean {
+                return viewModel.isLastPage()
+            }
+
+            override fun isLoading(): Boolean {
+                return viewModel.isLoading()
+            }
+
+            override fun loadMoreItems() {
+                popularMoviesPage += 1
+                loadMoviesList(popularMoviesPage, MovieSort.Popularity)
+            }
+        })
+
+        rv_top_rated_movies?.addOnScrollListener(object : PaginationScrollListener() {
+            override fun isLastPage(): Boolean {
+                return viewModel.isLastPage()
+            }
+
+            override fun isLoading(): Boolean {
+                return viewModel.isLoading()
+            }
+
+            override fun loadMoreItems() {
+                topRatedMoviesPage += 1
+                loadMoviesList(topRatedMoviesPage, MovieSort.TopRated)
+            }
+        })
+
+        rv_revenue_movies?.addOnScrollListener(object : PaginationScrollListener() {
+            override fun isLastPage(): Boolean {
+                return viewModel.isLastPage()
+            }
+
+            override fun isLoading(): Boolean {
+                return viewModel.isLoading()
+            }
+
+            override fun loadMoreItems() {
+                revenueMoviesPage += 1
+                loadMoviesList(revenueMoviesPage, MovieSort.Revenue)
+            }
+        })
     }
 }
