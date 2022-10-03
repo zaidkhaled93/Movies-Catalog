@@ -16,10 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
-    private val moviesRepo: MoviesRepository,
-    private val localMoviesRepo: MoviesLocalRepository
-) :
-    BaseViewModel() {
+    private val moviesRepo: MoviesRepository, private val localMoviesRepo: MoviesLocalRepository
+) : BaseViewModel() {
 
     //the three movies lists liveData, that are connected to the UI using data binding
     val popularMoviesList: MutableLiveData<List<MovieResponse>> by lazy { MutableLiveData<List<MovieResponse>>() }
@@ -33,8 +31,7 @@ class MoviesViewModel @Inject constructor(
         isLoading = true
         emit(Resource.loading(data = null))
         try {
-            val response =
-                moviesRepo.getMovies(NetworkConstants.API_KEY, sortBy.value, false, page)
+            val response = moviesRepo.getMovies(NetworkConstants.API_KEY, sortBy.value, false, page)
             isLoading = false
             if (response.results != null) {
                 distributeMoviesListBySortType(response.results, sortBy)
@@ -44,9 +41,7 @@ class MoviesViewModel @Inject constructor(
                 //Handle errors here depending on server response, for example 400, 401, 403...etc
                 emit(
                     Resource.customError(
-                        data = null,
-                        message = "No results found!",
-                        code = 400
+                        data = null, message = "No results found!", code = 400
                     )
                 )
             }
